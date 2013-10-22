@@ -69,14 +69,10 @@ trait CLikeCodegen extends GenericCodegen {
     
     def kernelSignature: String = {
       val out = new StringBuilder
-      if(resultIsVar)
-        out.append(hostTarget + "Ref< " + resultType + addRef(resultType) + " > ")
-      else
-        out.append(resultType)
-      if (!external) {
-        if(resultIsVar) out.append(" *")
-        else out.append(addRef(resultType))
-      }
+      if(resultIsVar) 
+        out.append(hostTarget + "Ref< " + resultType + addRef(resultType) + " > *")
+      else 
+        out.append(resultType + addRef(resultType))
       out.append(" kernel_" + syms.map(quote).mkString("") + "(")
       out.append(vals.map(p=>remap(p.tp) + addRef(p.tp) + quote(p)).mkString(", "))
       if (vals.length > 0 && vars.length > 0){
